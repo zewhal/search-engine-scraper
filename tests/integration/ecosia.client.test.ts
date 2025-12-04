@@ -1,5 +1,5 @@
 import { test, expect, describe } from "bun:test";
-import { createClient } from "../../src/client";
+import { createCuimpClient } from "../../src/client";
 import type { SERPQueryParams, SERPResponse } from "../../src/types/serp";
 import { ecosia } from "../../src/search-engine/ecosia";
 import type { CuimpResponse } from "cuimp";
@@ -20,7 +20,7 @@ const mockHtml = `
 describe("ecosia() integration with client", () => {
   test("parses search results correctly using Cuimp client", async () => {
     // Create a CuimpHttp client
-    const client = createClient();
+    const client = createCuimpClient();
 
     // Mock the 'get' method to return our HTML
     const originalGet = client.get.bind(client);

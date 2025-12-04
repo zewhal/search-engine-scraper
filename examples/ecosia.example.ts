@@ -1,10 +1,10 @@
-import { createClient } from "../src/client";
+import { createCuimpClient } from "../src/client";
 import type { SERPQueryParams } from "../src/types/serp";
 import { ecosia } from "../src/search-engine/ecosia";
 
 async function scrape_ecosia() {
   // Create a real CuimpHttp client
-  const client = createClient({});
+  const client = createCuimpClient({});
 
   // Define your query parameters
   const queryParams: SERPQueryParams = {

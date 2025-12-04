@@ -1,10 +1,10 @@
 import { describe, it, expect } from "bun:test";
-import { createClient } from "../src/client";
+import { createCuimpClient } from "../src/client";
 
 describe("Cuimp client creation (unit tests)", () => {
 
     it("should create a client with default descriptor", () => {
-        const client = createClient();
+        const client = createCuimpClient();
         expect(client).toBeDefined();
         expect(typeof client.request).toBe("function");
         expect(typeof client.get).toBe("function");
@@ -13,7 +13,7 @@ describe("Cuimp client creation (unit tests)", () => {
 
     it("should create a client with custom descriptor", () => {
         const descriptor = { browser: "firefox", version: "115", platform: "win32" };
-        const client = createClient(descriptor);
+        const client = createCuimpClient(descriptor);
 
         expect(client).toBeDefined();
         expect(typeof client.request).toBe("function");
