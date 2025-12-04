@@ -19,19 +19,13 @@ export async function ecosia(
         results: []
     };
 
-    try {
-        // Use 'for...of' if urls is an array
-        for (const url of urls) {
-            const response = await client.get(url, {
-                headers: header,
-                proxy: proxy
-            });
-
+    for (const url of urls) {
+        try {
+            const response = await client.get(url, { headers: header, proxy: proxy });
             const $ = cheerio.load(response.data);
 
-            $("article[data-test-id='organic-result']").each((i: number, el: any) => {
+            $("article[data-test-id='organic-result']").each((i, el) => {
                 const $el = $(el);
-
                 const title = $el.find("h2[data-test-id='result-title']").text().trim();
                 const url = $el.find("a[data-test-id='result-link']").attr("href") ?? "";
                 const snippet =
@@ -46,12 +40,9 @@ export async function ecosia(
                     position: i + 1,
                 });
             });
+        } catch (error: any) {
+            console.error(`Error fetching ${url}:`, error.message ?? error);
         }
-
-        return result;
-
-    } catch (error) {
-        console.error("Error occurred:", error);
-        return result;
     }
+    return result;
 }
