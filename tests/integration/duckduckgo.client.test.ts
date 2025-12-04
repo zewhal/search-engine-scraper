@@ -4,7 +4,9 @@ import { createPatchrightClient } from "../../src/client";
 import type { SERPQueryParams, SERPResponse } from "../../src/types/serp";
 
 describe("duckduckgo() real integration test", () => {
-  test("scrapes DuckDuckGo search results using Patchright", async () => {
+  const isCI = !!process.env.CI; // GitHub sets CI=true automatically
+
+  (isCI ? test.skip : test)("scrapes DuckDuckGo search results using Patchright", async () => {
     const { page, browser } = await createPatchrightClient({ headless: false });
 
     try {
@@ -26,7 +28,6 @@ describe("duckduckgo() real integration test", () => {
       expect(first).toHaveProperty("snippet");
       expect(first).toHaveProperty("position");
     } finally {
-
       await browser.close();
     }
   }, { timeout: 60_000 });
