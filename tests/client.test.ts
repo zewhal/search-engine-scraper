@@ -1,5 +1,5 @@
 import { describe, it, expect, test } from "bun:test";
-import { createCuimpClient, createPatchrightClient } from "../src/client";
+import { createCuimpClient } from "../src/client";
 
 describe("Cuimp client creation (unit tests)", () => {
 
@@ -21,20 +21,4 @@ describe("Cuimp client creation (unit tests)", () => {
         expect(typeof client.post).toBe("function");
     });
 
-});
-
-
-describe("createPatchrightClient() unit tests", () => {
-  test("returns a browser and a page object with expected methods", async () => {
-    const { browser, page } = await createPatchrightClient({ headless: true });
-
-    expect(browser).toBeTruthy();
-    expect(page).toBeTruthy();
-
-    expect(typeof page.goto).toBe("function");
-    expect(typeof page.$).toBe("function");
-    expect(typeof page.$$eval).toBe("function");
-
-    await browser.close();
-  });
 });

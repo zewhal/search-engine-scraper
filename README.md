@@ -1,20 +1,19 @@
-# 🔍 search-engine-scraper
+# search-engine-scraper
 
 A lightweight search engine scraping library for Bun projects.  
-Uses Cuimp + Cheerio for fast, non-JS sites and Patchright for real browser automation.
+Uses Cuimp + Cheerio
 
 ---
 
-## ✨ Features
+## Features
 
 - Fast HTML scraping using Cuimp + Cheerio  
-- Browser automation via Patchright  
 - TypeScript project  
 - Easy to extend and customize
 
 ---
 
-## 🚀 Installation
+## Installation
 
 Clone and install:
 
@@ -32,7 +31,7 @@ bun add https://github.com/zewhal/search-engine-scraper
 
 ---
 
-## 📁 Structure
+## Structure
 
 ```
 .
@@ -48,9 +47,8 @@ bun add https://github.com/zewhal/search-engine-scraper
 
 ---
 
-## 📌 Notes
+## Notes
 
-- Integration tests using Patchright are skipped in CI due to browser dependency requirements.
 - Run unit tests with:
 
 ```bash

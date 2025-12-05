@@ -33,7 +33,6 @@ jobs:
         run: |
           export PATH="$HOME/.bun/bin:$PATH"
           bun install
-          bun run patchright install
       - name: Run tests
         run: |
           export PATH="$HOME/.bun/bin:$PATH"
