@@ -1,13 +1,13 @@
 import * as cheerio from "cheerio";
-import type { CuimpHttp } from "cuimp";
+import type { CuimpHttp, CuimpRequestConfig } from "cuimp";
 import type { SERPQueryParams, SERPResponse } from "../types/serp";
 import buildUrl from "../utils/buildUrls";
 
 export async function ecosia(
     client: CuimpHttp,
     queryParams: SERPQueryParams,
-    header: Record<string, string | boolean | number>,
-    proxy: string
+    header?: Record<string, string | boolean | number>,
+    proxy?: string
 ): Promise<SERPResponse> {
     const baseUrl = "https://www.ecosia.org/search?method=index&q={query}&p={page}";
     const urls = buildUrl(baseUrl, queryParams);
@@ -18,10 +18,19 @@ export async function ecosia(
         page: queryParams.page,
         results: []
     };
+    
+    const requestOptions: CuimpRequestConfig = {}
+
+    if (header) {
+        requestOptions.headers = header;
+    }
+    if (proxy) {
+        requestOptions.proxy = proxy;
+    }
 
     for (const url of urls) {
         try {
-            const response = await client.get(url, { headers: header, proxy: proxy });
+            const response = await client.get(url, requestOptions);
             const $ = cheerio.load(response.data);
 
             $("article[data-test-id='organic-result']").each((i, el) => {
