@@ -1,5 +1,12 @@
 # search-engine-scraper
 
+⚠️ **Responsible Usage Warning**  
+This library **does not handle rate limiting**. You are responsible for using it **ethically and respectfully**, following the terms of service of any website you scrape.  
+
+**Important:** Search engines may block your IP if you send too many requests too quickly. Use responsibly and consider spreading out requests over time.
+
+---
+
 A lightweight search engine scraping library for Bun projects.  
 Uses Cuimp + Cheerio
 
