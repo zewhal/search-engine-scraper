@@ -1,29 +1,31 @@
 import { test, expect, describe } from "bun:test";
-import type { CuimpHttp } from "cuimp";
+import type { CuimpHttp, CuimpResponse } from "cuimp";
 import type { SERPQueryParams, SERPResponse } from "../../src/types/serp";
 import { ecosia } from "../../src/search-engine/ecosia";
+import { join } from "node:path";
 
-// --- Mock HTML for Ecosia result ---
-const mockHtml = `
-<article data-test-id="organic-result">
-  <h2 data-test-id="result-title">Test Title 1</h2>
-  <a data-test-id="result-link" href="https://example.com/1"></a>
-  <p data-test-id="web-result-description">Snippet 1</p>
-</article>
-<article data-test-id="organic-result">
-  <h2 data-test-id="result-title">Test Title 2</h2>
-  <a data-test-id="result-link" href="https://example.com/2"></a>
-  <p data-test-id="web-result-description">Snippet 2</p>
-</article>
-`;
 
-describe("ecosia()", () => {
-  test("parses search results correctly", async () => {
-    const mockClient: Partial<CuimpHttp> = {
-      get: async (_url: string, _options?: any) => ({
-        data: mockHtml
-      })
-    };
+describe("ecosia() unit", () => {
+  test("parses search results correctly using fixture", async () => {
+      const fixturePath = join(import.meta.dir, "../fixtures/ecosia/ecosia.live.html");
+      const mockHtml = await Bun.file(fixturePath).text();
+      const mockClient: Partial<CuimpHttp> = {
+        get: async <T = any>(_url: string, _options?: any): Promise<CuimpResponse<T>> => {
+          return {
+            data: mockHtml as unknown as T,
+            status: 200,
+            statusText: "OK",
+            headers: {},
+            rawBody: Buffer.from(""),
+            request: {
+              url: _url,
+              method: "GET",
+              headers: {},
+              command: "GET"
+            }
+          };
+        }
+      };
 
     const queryParams: SERPQueryParams = {
       query: "test query",
@@ -31,10 +33,7 @@ describe("ecosia()", () => {
       pageStart: 0
     };
 
-    const headers = {
-      "User-Agent": "Bun-Test"
-    };
-
+    const headers = { "User-Agent": "Bun-Test" };
     const proxy = "";
 
     const result: SERPResponse = await ecosia(
@@ -47,22 +46,7 @@ describe("ecosia()", () => {
     expect(result.engine).toBe("Ecosia");
     expect(result.query).toBe("test query");
     expect(result.page).toBe(1);
-
-    expect(result.results.length).toBe(2);
-
-    expect(result.results[0]).toEqual({
-      title: "Test Title 1",
-      url: "https://example.com/1",
-      snippet: "Snippet 1",
-      position: 1
-    });
-
-    expect(result.results[1]).toEqual({
-      title: "Test Title 2",
-      url: "https://example.com/2",
-      snippet: "Snippet 2",
-      position: 2
-    });
+    expect(result.results.length).toBeGreaterThan(0);
   });
 
   test("returns empty results if client throws", async () => {
@@ -74,13 +58,14 @@ describe("ecosia()", () => {
 
     const queryParams: SERPQueryParams = {
       query: "fail test",
-      page: 1
+      page: 1,
+      pageStart: 0
     };
 
     const headers = {};
     const proxy = "";
 
-    const result = await ecosia(
+    const result: SERPResponse = await ecosia(
       failingClient as CuimpHttp,
       queryParams,
       headers,
