@@ -47,7 +47,7 @@ describe("brave() integration with client (fixture)", () => {
     expect(result.results[0]).toEqual({
     "title": "Agartha Tome 1",
     "url": "https://webdisk.dictm.pnp.gov.ph/browse/p327G2/4265878/agartha_tome_1.pdf",
-    "snippet": "The burgeoning interest in subterranean infrastructure presents a fascinating opportunity for innovation and strategic planning. \"Agartha Tome 1,\" a hypothetical compendium on this subject, if it truly existed, would be a significant resource, bridging the gap between theoretical concepts and practical applications.",
+    "snippet": "July 24, 2025 - The burgeoning interest in subterranean infrastructure presents a fascinating opportunity for innovation and strategic planning. \"Agartha Tome 1,\" a hypothetical compendium on this subject, if it truly existed, would be a significant resource, bridging the gap between theoretical concepts and practical applications.",
     "position": 1
     });
 

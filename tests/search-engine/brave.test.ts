@@ -28,7 +28,7 @@ describe("brave() unit", () => {
       };
 
     const queryParams: SERPQueryParams = {
-      query: "entrance to agartha pdf site:gov.ph"",
+      query: "entrance to agartha pdf site:gov.ph",
       page: 1,
       pageStart: 0
     };
