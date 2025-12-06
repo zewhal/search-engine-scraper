@@ -3,44 +3,31 @@ import { createCuimpClient } from "../../src/client";
 import type { SERPQueryParams, SERPResponse } from "../../src/types/serp";
 import { ecosia } from "../../src/search-engine/ecosia";
 import type { CuimpResponse } from "cuimp";
+import { join } from "path";
 
-const mockHtml = `
-<article data-test-id="organic-result">
-  <h2 data-test-id="result-title">Integration Test Title 1</h2>
-  <a data-test-id="result-link" href="https://example.com/1"></a>
-  <p data-test-id="web-result-description">Snippet 1</p>
-</article>
-<article data-test-id="organic-result">
-  <h2 data-test-id="result-title">Integration Test Title 2</h2>
-  <a data-test-id="result-link" href="https://example.com/2"></a>
-  <p data-test-id="web-result-description">Snippet 2</p>
-</article>
-`;
+describe("ecosia() integration with client (fixture)", () => {
+  test("parses HTML fixture correctly", async () => {
+    const fixturePath = join(import.meta.dir, "../fixtures/ecosia/ecosia.live.html");
+    const mockHtml = await Bun.file(fixturePath).text();
 
-describe("ecosia() integration with client", () => {
-  test("parses search results correctly using Cuimp client", async () => {
-    // Create a CuimpHttp client
     const client = createCuimpClient();
 
-    // Mock the 'get' method to return our HTML
     const originalGet = client.get.bind(client);
     client.get = async <T = any>(_url: string, _options?: any): Promise<CuimpResponse<T>> => {
-    return {
+      return {
         data: mockHtml as unknown as T,
         status: 200,
         statusText: "OK",
         headers: {},
         rawBody: Buffer.from(""),
         request: {
-        url: _url,
-        method: "GET",
-        headers: {},
-        command: "GET"
+          url: _url,
+          method: "GET",
+          headers: {},
+          command: "GET"
         }
+      };
     };
-    };
-
-
 
     const queryParams: SERPQueryParams = {
       query: "integration test",
@@ -56,24 +43,22 @@ describe("ecosia() integration with client", () => {
     expect(result.engine).toBe("Ecosia");
     expect(result.query).toBe("integration test");
     expect(result.page).toBe(1);
-
-    expect(result.results.length).toBe(2);
+    expect(result.results.length).toBe(10);
 
     expect(result.results[0]).toEqual({
-      title: "Integration Test Title 1",
-      url: "https://example.com/1",
-      snippet: "Snippet 1",
-      position: 1
+    "title": "Asdasd - song and lyrics by LMBECIL - Spotify",
+    "url": "https://open.spotify.com/track/6iF3o1II7W7VaqHMZG3d04",
+    "snippet": "Asdasd · Recommended based on this song · Popular Tracks by LMBECIL · Popular Releases by LMBECIL · Popular Singles and EPs by LMBECIL · Recommended releases.",
+    "position": 1
     });
 
     expect(result.results[1]).toEqual({
-      title: "Integration Test Title 2",
-      url: "https://example.com/2",
-      snippet: "Snippet 2",
-      position: 2
+      "title": "ASDASD : r/spotify - Reddit",
+      "url": "https://www.reddit.com/r/spotify/comments/jr00n3/asdasd/",
+      "snippet": "Nov 9, 2020 ... I like to sort my songs within a playlist alphabetically, or in custom order. I think it looks better visually if you don't have a bunch of songs from the same ...",
+      "position": 2
     });
 
-    // Restore original get method if needed
     client.get = originalGet;
   });
 });
